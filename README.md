@@ -19,10 +19,10 @@
 
 ## Документация
 
-- [План тестирования]()
-- [Чек-лист]()
-- [Тест-кейсы]()
-- [Отчет о тестировании]()
+- [План тестирования](https://github.com/OAOblat/qamid_diplom/blob/main/QA%20Documentation/Plan.md)
+- [Чек-лист](https://github.com/OAOblat/qamid_diplom/blob/main/QA%20Documentation/Check.xlsx)
+- [Тест-кейсы](https://github.com/OAOblat/qamid_diplom/blob/main/QA%20Documentation/Cases.xlsx)
+- [Отчет о тестировании](https://github.com/OAOblat/qamid_diplom/blob/main/QA%20Documentation/Result.md)
 
 ---
 
@@ -30,7 +30,7 @@
 
 ---
 
-- Клонировать репозиторий командой `git clone ...`;
+- Клонировать репозиторий командой `git clone git@github.com:OAOblat/qamid_diplom.git`;
 - Открыть проект в Android Studio;
 - Запустить приложение на эмуляторе с API 29;
 - Запустить тесты из командной строки`./gradlew connectedAndroidTest` и дождаться окончания прогона автотестов;
