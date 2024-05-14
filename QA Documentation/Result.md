@@ -8,6 +8,15 @@
 В ходе автоматического тестирования приложения на эмуляторе Pixel 6 API 29
 успешно пройдено 58 тестов (89.23% - успешных тестов)
 
+## Документация
+
+- [Баг-репорт](https://github.com/OAOblat/qamid_diplom/blob/main/QA%20Documentation/Report.xlsx)
+- [Allure-result]()
+
+
+![image](https://github.com/OAOblat/qamid_diplom/assets/131019183/afa8b750-c9bf-4bac-a58f-6096ff86a42f)
+
+
 
 ## Результаты сравнения времени проверки приложения:
 
