@@ -26,11 +26,11 @@
         app:layout_constraintTop_toBottomOf="@id/filter_news_title_text_view">
 
         <AutoCompleteTextView
-            android:id="@+id/news_item_category_text_auto_complete_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/news_item_category"
-            android:inputType="text" />
+                android:id="@+id/news_item_category_text_auto_complete_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/news_item_category"
+                android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

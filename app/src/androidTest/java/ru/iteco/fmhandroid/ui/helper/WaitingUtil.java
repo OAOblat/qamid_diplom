@@ -1,4 +1,4 @@
-package ru.iteco.fmhandroid.ui;
+package ru.iteco.fmhandroid.ui.helper;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
@@ -16,11 +16,10 @@ import org.hamcrest.Matcher;
 
 import java.util.concurrent.TimeoutException;
 
-
-
 public class WaitingUtil {
     /**
      * Perform action of waiting for a specific view id to be displayed.
+     *
      * @param viewId The id of the view to wait for.
      * @param millis The timeout of until when to wait for.
      */
@@ -55,7 +54,6 @@ public class WaitingUtil {
                 }
                 while (System.currentTimeMillis() < endTime);
 
-                // timeout happens
                 throw new PerformException.Builder()
                         .withActionDescription(this.getDescription())
                         .withViewDescription(HumanReadables.describe(view))
@@ -63,5 +61,13 @@ public class WaitingUtil {
                         .build();
             }
         };
+    }
+
+    public static void sleep(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
