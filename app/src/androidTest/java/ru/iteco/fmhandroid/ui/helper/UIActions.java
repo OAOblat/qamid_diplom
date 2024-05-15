@@ -27,10 +27,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -98,28 +96,6 @@ public class UIActions {
         };
     }
 
-    public static class HasLinksMatcher {
-
-        public static Matcher<View> hasLinks(boolean hasLinks) {
-            return new BoundedMatcher<View, TextView>(TextView.class) {
-                @Override
-                public boolean matchesSafely(TextView textView) {
-                    boolean textHasLinks = textView.getUrls().length > 0;
-                    return textHasLinks == hasLinks;
-                }
-
-                @Override
-                public void describeTo(Description description) {
-                    if (hasLinks) {
-                        description.appendText("a TextView with links");
-                    } else {
-                        description.appendText("a TextView without links");
-                    }
-                }
-            };
-        }
-    }
-
     public static void waitForViewDisplayed(int viewId, long timeoutMillis) {
         onView(isRoot()).perform(waitDisplayed(viewId, timeoutMillis));
     }
@@ -165,10 +141,6 @@ public class UIActions {
         onView(allOf(withId(childId), isDescendantOfA(withId(parentId)))).check(matches(isDisplayed()));
     }
 
-    public static void swipeDown(int viewId) {
-        onView(withId(viewId)).check(matches(isDisplayed())).perform(ViewActions.swipeDown());
-    }
-
     public static boolean isViewVisible(int viewID) {
         try {
             onView(withId(viewID)).check(matches(isDisplayed()));
@@ -176,49 +148,6 @@ public class UIActions {
         } catch (NoMatchingViewException | AssertionError e) {
             return false;
         }
-    }
-
-    public static String getText(ViewInteraction matcher) {
-        final String[] text = new String[1];
-        ViewAction viewAction = new ViewAction() {
-
-            @Override
-            public Matcher<View> getConstraints() {
-                return isAssignableFrom(TextView.class);
-            }
-
-            @Override
-            public String getDescription() {
-                return "Text of the view";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                TextView textView = (TextView) view;
-                text[0] = textView.getText().toString();
-            }
-        };
-
-        matcher.perform(viewAction);
-        return text[0];
-    }
-
-    public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
-        return new TypeSafeMatcher<View>() {
-            int currentIndex = 0;
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with index: ");
-                description.appendValue(index);
-                matcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                return matcher.matches(view) && currentIndex++ == index;
-            }
-        };
     }
 
     public static Matcher<View> childAtPosition(
