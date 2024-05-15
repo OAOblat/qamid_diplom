@@ -70,13 +70,6 @@ public class UIActions {
                 .perform(click());
     }
 
-//    public static void clickButtonWithText(int buttonText) {
-//        onView(withText(buttonText))
-//                .check(matches(isEnabled()))
-//                .check(matches(isDisplayed()))
-//                .perform(click());
-//    }
-
     public static void clickButtonWithText(int buttonTextId) {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         String buttonText = context.getString(buttonTextId);
