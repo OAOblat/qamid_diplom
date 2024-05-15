@@ -1,20 +1,14 @@
 package ru.iteco.fmhandroid.ui.steps;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.allOf;
 import static io.qameta.allure.kotlin.Allure.step;
 import static ru.iteco.fmhandroid.ui.elements.OurMissionScreen.ourMissionDescription;
 import static ru.iteco.fmhandroid.ui.elements.OurMissionScreen.ourMissionList;
 import static ru.iteco.fmhandroid.ui.elements.OurMissionScreen.ourMissionTitle;
+import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.clickSelectedItemInBlock;
 import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.getRandomItemPosition;
 import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.getTextAtPosition;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.checkTextIsDisplayed;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.scrollToAndCheckTextIsDisplayed;
-import static ru.iteco.fmhandroid.ui.helper.UIActions.scrollToAndCheckTextIsNotDisplayed;
 
 public class OurMissionStep {
     public void isTitleOurMissionTextVisible() {
@@ -34,8 +28,7 @@ public class OurMissionStep {
     }
 
     public static void clickSelectedItemInOurMission(int position) {
-        onView(allOf(withId(ourMissionList), isDisplayed()))
-                .perform(actionOnItemAtPosition(position, click()));
+        clickSelectedItemInBlock(position, ourMissionList);
     }
 
     public String getActualDescription(int position) {
@@ -45,12 +38,16 @@ public class OurMissionStep {
     }
 
     public void checkDescriptionIsDisplay(String description, boolean expectedDisplayed) {
+        step("Проверка, что описание цитаты: <" + description + "> " + (expectedDisplayed ? "отображается" : "не отображается"));
+        boolean found = scrollToAndCheckTextIsDisplayed(ourMissionList, ourMissionDescription, description);
         if (expectedDisplayed) {
-            step("Проверка, что описание цитаты: <" + description + "> отображается");
-            scrollToAndCheckTextIsDisplayed(ourMissionList, ourMissionDescription, description);
+            if (!found) {
+                throw new AssertionError("Description \"" + description + "\" not found.");
+            }
         } else {
-            step("Проверка, что описание цитаты: <" + description + "> не отображается");
-            scrollToAndCheckTextIsNotDisplayed(ourMissionList, ourMissionDescription, description);
+            if (found) {
+                throw new AssertionError("Description \"" + description + "\" is displayed, but it should not be.");
+            }
         }
     }
 }

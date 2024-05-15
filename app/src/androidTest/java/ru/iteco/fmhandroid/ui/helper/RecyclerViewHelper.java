@@ -1,7 +1,9 @@
 package ru.iteco.fmhandroid.ui.helper;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
@@ -136,5 +138,55 @@ public class RecyclerViewHelper {
                     }
                 }));
         return text[0];
+    }
+
+    public static ViewAction clickChildViewWithId(final int id) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return null;
+            }
+
+            @Override
+            public String getDescription() {
+                return "Click on a child view with specified id.";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                View v = view.findViewById(id);
+                if (v != null) {
+                    v.performClick();
+                }
+            }
+        };
+    }
+
+    public static void clickSelectedItemInBlock(int position, int viewId) {
+        onView(allOf(withId(viewId), isDisplayed()))
+                .perform(actionOnItemAtPosition(position, click()));
+    }
+
+    public static void clickButtonInSelectedItem(int recyclerViewId, int buttonViewId, int position) {
+        onView(withId(recyclerViewId))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(position, new ViewAction() {
+                    @Override
+                    public Matcher<View> getConstraints() {
+                        return null;
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return "Click on a child view with specified id.";
+                    }
+
+                    @Override
+                    public void perform(UiController uiController, View view) {
+                        View v = view.findViewById(buttonViewId);
+                        if (v != null) {
+                            v.performClick();
+                        }
+                    }
+                }));
     }
 }

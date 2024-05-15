@@ -42,7 +42,6 @@ import static ru.iteco.fmhandroid.ui.elements.NewsScreen.publishDateStartLayout;
 import static ru.iteco.fmhandroid.ui.elements.NewsScreen.sortNews;
 import static ru.iteco.fmhandroid.ui.helper.NewsHelper.addNews;
 import static ru.iteco.fmhandroid.ui.helper.NewsHelper.clearNewsInRecyclerView;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.clickButtonInRandomNews;
 import static ru.iteco.fmhandroid.ui.helper.NewsHelper.clickButtonInSelectedNews;
 import static ru.iteco.fmhandroid.ui.helper.NewsHelper.clickSelectedItemInNewsBlock;
 import static ru.iteco.fmhandroid.ui.helper.NewsHelper.getRandomItemInNewsBlock;
@@ -56,7 +55,6 @@ import static ru.iteco.fmhandroid.ui.helper.UIActions.clickButton;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.clickButtonWithText;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.isViewDisplayedAfterAction;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.scrollToAndCheckTextIsDisplayed;
-import static ru.iteco.fmhandroid.ui.helper.UIActions.scrollToAndCheckTextIsNotDisplayed;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.waitForViewDisplayed;
 import static ru.iteco.fmhandroid.ui.helper.WaitingUtil.waitDisplayed;
 
@@ -201,7 +199,7 @@ public class NewsSteps {
 
     public void cancelDeleteNewsInRandomNews(int position) {
         step("Клик по кнопке удаления новости на позиции: " + position);
-        clickButtonInRandomNews(deleteNewsImage);
+        clickButtonInSelectedNews(deleteNewsImage, position);
         step("Клик по кнопке отмены удаления");
         clickButton(buttonCancel);
     }
@@ -239,11 +237,6 @@ public class NewsSteps {
         clickButton(cancelButton);
         checkTextIsDisplayed(cancellation);
         clickButton(buttonCancel);
-    }
-
-    public void openEditNewsPage() {
-        step("Клик по кнопке РЕДАКТИРОВАТЬ в рандомно выбранной новости");
-        clickButtonInRandomNews(editButton);
     }
 
     public void openEditNewsPage(int position) {
@@ -299,6 +292,7 @@ public class NewsSteps {
     }
 
     public int getNewsPosition(ActivityScenarioRule<AppActivity> mActivityScenarioRule, String newsTitleText) {
+        checkNewsIsDisplay(newsTitleText, true);
         step("Получение позиции новости с заголовком: <" + newsTitleText + ">");
         int position = getPosition(mActivityScenarioRule, newsListRecyclerView, newsTitle, newsTitleText);
         step("Позиция: " + position);
@@ -306,28 +300,30 @@ public class NewsSteps {
     }
 
     public void checkNewsIsDisplay(String title, boolean expectedDisplayed) {
+        step("Проверка, что новость с заголовком: <" + title + "> " + (expectedDisplayed ? "отображается" : "не отображается"));
+        boolean found = scrollToAndCheckTextIsDisplayed(newsListRecyclerView, newsTitle, title);
         if (expectedDisplayed) {
-            step("Проверка, что новость с заголовком: <" + title + "> отображается");
-            boolean found = scrollToAndCheckTextIsDisplayed(newsListRecyclerView, newsTitle, title);
             if (!found) {
                 throw new AssertionError("News with title \"" + title + "\" not found.");
             }
         } else {
-            step("Проверка, что новость с заголовком: <" + title + "> не отображается");
-            scrollToAndCheckTextIsNotDisplayed(newsListRecyclerView, newsTitle, title);
+            if (found) {
+                throw new AssertionError("News with title \"" + title + "\" is displayed, but it should not be.");
+            }
         }
     }
 
     public void checkDescriptionIsDisplay(String description, boolean expectedDisplayed) {
+        step("Проверка, что описание новости: <" + description + "> " + (expectedDisplayed ? "отображается" : "не отображается"));
+        boolean found = scrollToAndCheckTextIsDisplayed(newsListRecyclerView, newsDescriptionTextView, description);
         if (expectedDisplayed) {
-            step("Проверка, что описание новости: <" + description + "> отображается");
-            boolean found = scrollToAndCheckTextIsDisplayed(newsListRecyclerView, newsDescriptionTextView, description);
             if (!found) {
                 throw new AssertionError("Description \"" + description + "\" not found.");
             }
         } else {
-            step("Проверка, что описание новости: <" + description + "> не отображается");
-            scrollToAndCheckTextIsNotDisplayed(newsListRecyclerView, newsDescriptionTextView, description);
+            if (found) {
+                throw new AssertionError("Description \"" + description + "\" is displayed, but it should not be.");
+            }
         }
     }
 
@@ -380,14 +376,13 @@ public class NewsSteps {
     }
 
     public void assertEqualsString(String expected, String actual) {
-        step("Проверка на равенство значений: <" + expected + "> должно быть равно: <" + actual + ">");
+        step("Проверка на равенство значений: <" + expected + "> и <" + actual + ">");
         assertEquals(expected, actual);
     }
 
     public String getActualTitle(int position) {
         String title = getTextAtPosition(newsListRecyclerView, position, newsTitle);
         step("Получение заголовка новости на позиции = " + position + ". Заголовок: <" + title + ">");
-
         return title;
     }
 

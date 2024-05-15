@@ -33,7 +33,12 @@ public class AuthSteps {
 
     public void checkLogoDisplayedAfterAuth(boolean expectedResult) {
         step(expectedResult ? "Открытие главной страницы" : "Главная страница не открылась");
-        isViewDisplayedAfterAction(waitDisplayed(logo, 2000), expectedResult);
+        boolean isDisplayed = isViewDisplayedAfterAction(waitDisplayed(logo, 2000), expectedResult);
+        if (expectedResult && !isDisplayed) {
+            throw new AssertionError("Logo is not displayed after authentication.");
+        } else if (!expectedResult && isDisplayed) {
+            throw new AssertionError("Logo is displayed after authentication, but it should not be.");
+        }
     }
 
     public void checkAuthScreenElements() {

@@ -80,7 +80,7 @@ public class ControlPanelTest {
     @DisplayName("Отображение новости с верно выбранным периодом фильтрации")
     @Feature("Панель управления")
     @Test
-    public void testCheckNewsDisplayedAfterIncorrectFilterPeriod() {
+    public void testCheckNewsDisplayedAfterCorrectFilterPeriod() {
         newsSteps.deleteNews();
         String yesterdayNews = newsSteps.addNewsWithAdjustedDate(-1);
         String todayNews = newsSteps.addNewsWithAdjustedDate(0);
@@ -95,7 +95,7 @@ public class ControlPanelTest {
     @DisplayName("Отсутствие отображения новости при фильтрации с другой датой")
     @Feature("Панель управления")
     @Test
-    public void testCheckNewsNotDisplayedAfterFilterPeriod() {
+    public void testCheckNewsNotDisplayedAfterFilterAnotherPeriod() {
         String yesterdayNews = newsSteps.addNewsWithAdjustedDate(-1);
         newsSteps.filterNews();
         newsSteps.setPublishDateStartPeriod(0);

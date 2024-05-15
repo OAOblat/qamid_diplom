@@ -138,5 +138,4 @@ public class NavSteps {
         waitForViewDisplayed(loginField, 6000);
         checkViewIsDisplayed(loginField);
     }
-
 }

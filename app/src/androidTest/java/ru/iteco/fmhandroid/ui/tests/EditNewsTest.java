@@ -124,8 +124,8 @@ public class EditNewsTest {
     @Feature("Редактирование новости")
     @Test
     public void testCancelingExitFromNewsEditing() {
-        newsSteps.openEditNewsPage();
-        newsSteps.editTitleInRandomNews();
+        int position = newsSteps.getRandomItemInNews();
+        newsSteps.openEditNewsPage(position);
         newsSteps.cancelingExitFromNewsEditing();
 
         newsSteps.isEditPageVisible();

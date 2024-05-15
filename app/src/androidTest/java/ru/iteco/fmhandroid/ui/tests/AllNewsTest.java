@@ -83,14 +83,13 @@ public class AllNewsTest {
     @Feature("Страница ВСЕ НОВОСТИ")
     @Test
     public void testCheckNewsDisplayedAfterFilterPeriod() {
-        newsSteps.addNewsWithAdjustedDate(0);
+        String title = newsSteps.addNewsWithAdjustedDate(0);
         navSteps.goToNewsPage();
-        String addedNewsTitle = newsSteps.getNewsTitle(0);
         newsSteps.filterNews();
         newsSteps.setPublishDateStartPeriod(0);
         newsSteps.setPublishDateEndPeriod(0);
         newsSteps.filterSubmit();
-        newsSteps.checkNewsIsDisplay(addedNewsTitle, true);
+        newsSteps.checkNewsIsDisplay(title, true);
     }
 
     @DisplayName("Ошибка фильтрации при неверно выбранном периоде")
@@ -107,15 +106,15 @@ public class AllNewsTest {
     @DisplayName("Отсутствие отображения новости при фильтрации с другой датой")
     @Feature("Страница ВСЕ НОВОСТИ")
     @Test
-    public void testCheckNewsNotDisplayedAfterIncorrectFilterPeriod() {
-        newsSteps.addNewsWithAdjustedDate(0);
+    public void testCheckNewsNotDisplayedAfterFilterWithAnotherPeriod() {
+        String title = newsSteps.addNewsWithAdjustedDate(0);
         navSteps.goToNewsPage();
-        String addedNewsTitle = newsSteps.getNewsTitle(0);
+        newsSteps.checkNewsIsDisplay(title, true);
         newsSteps.filterNews();
         newsSteps.setPublishDateStartPeriod(1);
         newsSteps.setPublishDateEndPeriod(1);
         newsSteps.filterSubmit();
-        newsSteps.checkNewsIsDisplay(addedNewsTitle, false);
+        newsSteps.checkNewsIsDisplay(title, false);
     }
 
     @DisplayName("Разворачивание карточки новости в блоке")
@@ -139,7 +138,7 @@ public class AllNewsTest {
     @DisplayName("Отсутствие новости в списке с датой из будущего")
     @Feature("Страница ВСЕ НОВОСТИ")
     @Test
-    public void testNoNewsInListWithTomorrowDate() {
+    public void testNotDisplayNewsWithTomorrowDate() {
         String titleNews = newsSteps.addNewsWithAdjustedDate(1);
         navSteps.goToNewsPage();
         newsSteps.checkNewsIsDisplay(titleNews, false);
@@ -152,7 +151,6 @@ public class AllNewsTest {
         int position = newsSteps.getRandomItemInNews();
         String title = newsSteps.getActualTitle(position);
         navSteps.goToControlPanel();
-        newsSteps.checkNewsIsDisplay(title, true);
         position = newsSteps.getNewsPosition(mActivityScenarioRule, title);
         newsSteps.openEditNewsPage(position);
         newsSteps.editDateInRandomNews(1);

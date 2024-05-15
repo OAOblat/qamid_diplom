@@ -1,14 +1,11 @@
 package ru.iteco.fmhandroid.ui.helper;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.PickerActions.setDate;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.allOf;
 import static ru.iteco.fmhandroid.ui.elements.ControlPanel.addNewsButton;
 import static ru.iteco.fmhandroid.ui.elements.ControlPanel.deleteNewsImage;
 import static ru.iteco.fmhandroid.ui.elements.ControlPanel.newsControlPanel;
@@ -27,23 +24,21 @@ import static ru.iteco.fmhandroid.ui.elements.MainScreen.newsListRecyclerView;
 import static ru.iteco.fmhandroid.ui.elements.Navigation.mainMenu;
 import static ru.iteco.fmhandroid.ui.elements.Navigation.menuItemNewsText;
 import static ru.iteco.fmhandroid.ui.elements.NewsScreen.editNewsButton;
+import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.clickButtonInSelectedItem;
+import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.clickChildViewWithId;
+import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.clickSelectedItemInBlock;
 import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.getRandomItemPosition;
 import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.isRecyclerViewEmpty;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.clickButton;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.clickButtonWithText;
-import static ru.iteco.fmhandroid.ui.helper.UIActions.clickChildViewWithId;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.inputText;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.waitForViewDisplayed;
 import static ru.iteco.fmhandroid.ui.helper.WaitingUtil.sleep;
 
-import android.view.View;
 import android.widget.DatePicker;
 
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 import java.util.ArrayList;
@@ -205,66 +200,18 @@ public class NewsHelper {
         }
     }
 
-    private static int randomPosition = -1;
-
     public static int getRandomItemInNewsBlock() {
-        return randomPosition = getRandomItemPosition(newsListRecyclerView);
-    }
-
-    public static int clickButtonInRandomNews(int viewId) {
-        if (randomPosition == -1) {
-            getRandomItemInNewsBlock();
-        }
-        onView(withId(newsListRecyclerView))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(randomPosition, new ViewAction() {
-                    @Override
-                    public Matcher<View> getConstraints() {
-                        return null;
-                    }
-
-                    @Override
-                    public String getDescription() {
-                        return "Click on a child view with specified id.";
-                    }
-
-                    @Override
-                    public void perform(UiController uiController, View view) {
-                        View v = view.findViewById(viewId);
-                        if (v != null) {
-                            v.performClick();
-                        }
-                    }
-                }));
-        return randomPosition;
+        return getRandomItemPosition(newsListRecyclerView);
     }
 
     public static void clickButtonInSelectedNews(int viewId, int position) {
-        onView(withId(newsListRecyclerView))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(position, new ViewAction() {
-                    @Override
-                    public Matcher<View> getConstraints() {
-                        return null;
-                    }
-
-                    @Override
-                    public String getDescription() {
-                        return "Click on a child view with specified id.";
-                    }
-
-                    @Override
-                    public void perform(UiController uiController, View view) {
-                        View v = view.findViewById(viewId);
-                        if (v != null) {
-                            v.performClick();
-                        }
-                    }
-                }));
+        clickButtonInSelectedItem(newsListRecyclerView, viewId, position);
     }
 
     public static void clickSelectedItemInNewsBlock(int position) {
-        onView(allOf(withId(newsListRecyclerView), isDisplayed()))
-                .perform(actionOnItemAtPosition(position, click()));
+        clickSelectedItemInBlock(position, newsListRecyclerView);
     }
+
 
     public static void clearNewsInRecyclerView() {
         boolean newsRemoved;
