@@ -32,7 +32,7 @@
 
 - Клонировать репозиторий командой `git clone git@github.com:OAOblat/qamid_diplom.git`;
 - Открыть проект в Android Studio;
-- Запустить приложение на эмуляторе с API 29;
+- Запустить приложение на эмуляторе (Android API 29);
 - Запустить тесты из командной строки`./gradlew connectedAndroidTest` и дождаться окончания прогона автотестов;
 
 
