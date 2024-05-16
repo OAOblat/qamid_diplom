@@ -9,10 +9,6 @@ import static ru.iteco.fmhandroid.ui.elements.Navigation.logo;
 import static ru.iteco.fmhandroid.ui.elements.Navigation.mainMenu;
 import static ru.iteco.fmhandroid.ui.elements.Navigation.menuItemMainText;
 import static ru.iteco.fmhandroid.ui.elements.NewsScreen.allNewsCardsBlock;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.addNews;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.getRandomCategory;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.getRandomDescription;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.getRandomTitle;
 import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.isRecyclerViewNotEmpty;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.checkViewIsDisplayed;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.checkViewIsNotDisplayed;
@@ -20,7 +16,10 @@ import static ru.iteco.fmhandroid.ui.helper.UIActions.clickButton;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.clickButtonWithText;
 import static ru.iteco.fmhandroid.ui.helper.UIActions.waitForViewDisplayed;
 
+import ru.iteco.fmhandroid.ui.helper.NewsHelper;
+
 public class MainSteps {
+    NewsHelper newsHelper = new NewsHelper();
     public void isNewsListContainerVisible() {
         step("Отображение блока новостей на главном экране");
         checkViewIsDisplayed(newsListContainer);
@@ -30,7 +29,7 @@ public class MainSteps {
         step("Проверка наличия хотя бы одной новости в списке");
         if (!isRecyclerViewNotEmpty(newsListRecyclerView)) {
             step("Добавление новости, так как список пуст");
-            addNews(getRandomCategory(), getRandomTitle(), getRandomDescription(), 0, 0);
+            newsHelper.addNews(newsHelper.getRandomCategory(), newsHelper.getRandomTitle(), newsHelper.getRandomDescription(), 0, 0);
             clickButton(mainMenu);
             clickButtonWithText(menuItemMainText);
         }

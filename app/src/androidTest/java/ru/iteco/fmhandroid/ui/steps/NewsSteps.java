@@ -40,12 +40,6 @@ import static ru.iteco.fmhandroid.ui.elements.NewsScreen.newsTitle;
 import static ru.iteco.fmhandroid.ui.elements.NewsScreen.publishDateEndLayout;
 import static ru.iteco.fmhandroid.ui.elements.NewsScreen.publishDateStartLayout;
 import static ru.iteco.fmhandroid.ui.elements.NewsScreen.sortNews;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.addNews;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.clearNewsInRecyclerView;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.clickButtonInSelectedNews;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.clickSelectedItemInNewsBlock;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.getRandomItemInNewsBlock;
-import static ru.iteco.fmhandroid.ui.helper.NewsHelper.setPeriod;
 import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.getPosition;
 import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.getTextAtPosition;
 import static ru.iteco.fmhandroid.ui.helper.RecyclerViewHelper.isRecyclerViewHasTwoItem;
@@ -65,14 +59,12 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
 
-import java.util.List;
-
 import ru.iteco.fmhandroid.ui.AppActivity;
 import ru.iteco.fmhandroid.ui.elements.ControlPanel;
-import ru.iteco.fmhandroid.ui.helper.DateTimeHelper;
 import ru.iteco.fmhandroid.ui.helper.NewsHelper;
 
 public class NewsSteps {
+    NewsHelper newsHelper = new NewsHelper();
 
     public void sortNews() {
         step("Клик по кнопке 'СОРТИРОВКА'");
@@ -82,73 +74,73 @@ public class NewsSteps {
     public String addNewsWithAdjustedTime(int hours) {
         String title = getRandomTitle();
         step("Создание новости в временем, отличной от текущей на: " + hours + " ч. Заголовок: <" + title + ">");
-        addNews(NewsHelper.getRandomCategory(), title, NewsHelper.getRandomDescription(), 0, hours);
+        newsHelper.addNews(newsHelper.getRandomCategory(), title, newsHelper.getRandomDescription(), 0, hours);
         return title;
     }
 
     public String addNewsWithAdjustedDate(int date) {
-        String title = NewsHelper.getRandomTitle();
+        String title = newsHelper.getRandomTitle();
         step("Создание новости с датой, отличной от текущей на: " + date + " дн. Заголовок: <" + title + ">");
-        addNews(NewsHelper.getRandomCategory(), title, NewsHelper.getRandomDescription(), date, 0);
+        newsHelper.addNews(newsHelper.getRandomCategory(), title, newsHelper.getRandomDescription(), date, 0);
         return title;
     }
 
     public String getRandomCategory() {
-        return NewsHelper.getRandomCategory();
+        return newsHelper.getRandomCategory();
     }
 
     public String getIncorrectCategory() {
-        return NewsHelper.getIncorrectCategory();
+        return newsHelper.getIncorrectCategory();
     }
 
     public String getRandomTitle() {
-        return NewsHelper.getRandomTitle();
+        return newsHelper.getRandomTitle();
     }
 
     public String getRandomDescription() {
-        return NewsHelper.getRandomDescription();
+        return newsHelper.getRandomDescription();
     }
 
     public void enterCategory(String category) {
         step("Ввод <" + category + "> в поле категории");
-        NewsHelper.enterCategory(category);
+        newsHelper.enterCategory(category);
     }
 
     public void enterTitle(String title) {
         step("Ввод <" + title + "> в поле заголовка");
-        NewsHelper.enterTitle(title);
+        newsHelper.enterTitle(title);
     }
 
     public String enterDate(int days) {
         step("Ввод даты отличной от текущей на " + days + " дн.");
-        String adjustedDate = DateTimeHelper.getAdjustedDate(days);
+        String adjustedDate = newsHelper.getAdjustedDate(days);
         String[] parts = adjustedDate.split("-");
         String year = parts[0];
         String month = parts[1];
         String day = parts[2];
-        NewsHelper.setPublishDate(year, month, day);
+        newsHelper.setPublishDate(year, month, day);
         return day + "." + month + "." + year;
     }
 
     public void enterTime(int hours) {
         step("Ввод времени отличной от текущей на " + hours + " ч.");
-        String adjustedTime = DateTimeHelper.getAdjustedTime(hours);
+        String adjustedTime = newsHelper.getAdjustedTime(hours);
         String[] parts2 = adjustedTime.split(" ");
         String time = parts2[1];
         String[] timeParts = time.split(":");
         String hoursOfTime = timeParts[0];
         String minutesOfTime = timeParts[1];
-        NewsHelper.setPublishTime(hoursOfTime, minutesOfTime);
+        newsHelper.setPublishTime(hoursOfTime, minutesOfTime);
     }
 
     public void enterDescription(String description) {
         step("Ввод <" + description + "> в поле описания");
-        NewsHelper.enterDescription(description);
+        newsHelper.enterDescription(description);
     }
 
     public void saveNews() {
         step("Сохранение изменений");
-        NewsHelper.saveNews();
+        newsHelper.saveNews();
     }
 
     public void isControlPanelDisplayedAfterAction(boolean expectedResult) {
@@ -188,30 +180,30 @@ public class NewsSteps {
 
     public void deleteRandomNews(int position) {
         step("Удаление новости на позиции: " + position);
-        clickButtonInSelectedNews(deleteNewsImage, position);
+        newsHelper.clickButtonInSelectedNews(deleteNewsImage, position);
         clickButton(buttonOk);
     }
 
     public void expandRandomNews(int position) {
         step("Клик по новости с позицией = " + position);
-        clickSelectedItemInNewsBlock(position);
+        newsHelper.clickSelectedItemInNewsBlock(position);
     }
 
     public void cancelDeleteNewsInRandomNews(int position) {
         step("Клик по кнопке удаления новости на позиции: " + position);
-        clickButtonInSelectedNews(deleteNewsImage, position);
+        newsHelper.clickButtonInSelectedNews(deleteNewsImage, position);
         step("Клик по кнопке отмены удаления");
         clickButton(buttonCancel);
     }
 
     public void setPublishDateStartPeriod(int days) {
         step("Установка даты начала периода с датой отличной от текущей на: " + days + " дн.");
-        setPeriod(publishDateStartLayout, days);
+        newsHelper.setPeriod(publishDateStartLayout, days);
     }
 
     public void setPublishDateEndPeriod(int days) {
         step("Установка даты окончания периода с датой отличной от текущей на: " + days + " дн.");
-        setPeriod(publishDateEndLayout, days);
+        newsHelper.setPeriod(publishDateEndLayout, days);
     }
 
     public void filterSubmit() {
@@ -241,7 +233,7 @@ public class NewsSteps {
 
     public void openEditNewsPage(int position) {
         step("Клик по кнопке РЕДАКТИРОВАТЬ в новости с позицией: " + position);
-        clickButtonInSelectedNews(editButton, position);
+        newsHelper.clickButtonInSelectedNews(editButton, position);
     }
 
     public String editTitleInRandomNews() {
@@ -279,15 +271,6 @@ public class NewsSteps {
             }
         } else {
             fail("Не удалось найти позицию одной или обеих новостей");
-        }
-    }
-
-    public String getNewsTitle(int position) {
-        List<NewsHelper.News> newsList = NewsHelper.getNewsList();
-        if (!newsList.isEmpty()) {
-            return newsList.get(position).getTitle();
-        } else {
-            return null;
         }
     }
 
@@ -429,13 +412,13 @@ public class NewsSteps {
     }
 
     public int getRandomItemInNews() {
-        int position = getRandomItemInNewsBlock();
+        int position = newsHelper.getRandomItemInNewsBlock();
         step("Получение рандомной позиции. Позиция = " + position);
         return position;
     }
 
     public void deleteNews() {
-        clearNewsInRecyclerView();
+        newsHelper.clearNewsInRecyclerView();
     }
 
     public void checkNewsHaveItemsOrAddNewsInAllNews() {

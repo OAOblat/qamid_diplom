@@ -41,15 +41,31 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import org.hamcrest.Matchers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Random;
 
 import io.bloco.faker.Faker;
 import ru.iteco.fmhandroid.ui.elements.ControlPanel;
 
 public class NewsHelper {
-    public static String getRandomCategory() {
+    Faker faker = new Faker();
+
+    public String getAdjustedTime(int hours) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY, hours);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return dateFormat.format(calendar.getTime());
+    }
+
+    public String getAdjustedDate(int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, days);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return dateFormat.format(calendar.getTime());
+    }
+    public String getRandomCategory() {
         String[] categories = {
                 "Объявление",
                 "День рождения",
@@ -65,30 +81,25 @@ public class NewsHelper {
         return categories[randomIndex];
     }
 
-    public static String getRandomTitle() {
-        Faker faker = new Faker();
+    public String getRandomTitle() {
         String randomWord = faker.lorem.word();
         int randomNumber = new Random().nextInt(100); // Генерация случайного числа от 0 до 99
         return "Новое событие " + randomWord + " " + randomNumber;
     }
 
-    public static String getIncorrectCategory() {
-        Faker faker = new Faker();
+    public String getIncorrectCategory() {
         return faker.lorem.word();
     }
 
-    public static String getRandomDescription() {
-        Faker faker = new Faker();
+    public String getRandomDescription() {
         String randomWord = faker.lorem.word();
         int randomNumber = new Random().nextInt(100); // Генерация случайного числа от 0 до 99
         return "Описание " + randomWord + " " + randomNumber;
     }
 
-    private static final List<News> newsList = new ArrayList<>();
-
-    public static News addNews(String category, String title, String description, int days, int hours) {
-        String adjustedDate = DateTimeHelper.getAdjustedDate(days);
-        String adjustedTime = DateTimeHelper.getAdjustedTime(hours);
+    public void addNews(String category, String title, String description, int days, int hours) {
+        String adjustedDate = getAdjustedDate(days);
+        String adjustedTime = getAdjustedTime(hours);
         String[] parts = adjustedDate.split("-");
         String year = parts[0];
         String month = parts[1];
@@ -108,14 +119,10 @@ public class NewsHelper {
         enterDescription(description);
         saveNews();
         waitForViewDisplayed(newsControlPanel, 3000);
-
-        News news = new News(title, category, description);
-        newsList.add(news);
-        return news;
     }
 
-    public static void setPeriod(int viewId, int days) {
-        String adjustedDate = DateTimeHelper.getAdjustedDate(days);
+    public void setPeriod(int viewId, int days) {
+        String adjustedDate = getAdjustedDate(days);
 
         String[] parts = adjustedDate.split("-");
         String year = parts[0];
@@ -125,22 +132,22 @@ public class NewsHelper {
         setPublishDatePeriod(viewId, year, month, day);
     }
 
-    private static void navigateToCreateNews() {
+    private void navigateToCreateNews() {
         clickButton(mainMenu);
         clickButtonWithText(menuItemNewsText);
         clickButton(editNewsButton);
         clickButton(addNewsButton);
     }
 
-    public static void enterCategory(String category) {
+    public void enterCategory(String category) {
         inputText(categoryField, category);
     }
 
-    public static void enterTitle(String title) {
+    public void enterTitle(String title) {
         inputText(titleField, title);
     }
 
-    public static void setPublishTime(String hours, String minutes) {
+    public void setPublishTime(String hours, String minutes) {
         clickButton(publishTime);
         clickButton(timepickerTextInputModeDescription);
         inputText(hourField, hours);
@@ -148,71 +155,39 @@ public class NewsHelper {
         clickButton(buttonOk);
     }
 
-    public static void setPublishDate(String year, String month, String day) {
+    public void setPublishDate(String year, String month, String day) {
         clickButton(publishDate);
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(setDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)));
         clickButton(buttonOk);
     }
 
-    private static void setPublishDatePeriod(int viewId, String year, String month, String day) {
+    private void setPublishDatePeriod(int viewId, String year, String month, String day) {
         clickButton(viewId);
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(setDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)));
         clickButton(buttonOk);
     }
 
-    public static void enterDescription(String description) {
+    public void enterDescription(String description) {
         inputText(descriptionField, description);
     }
 
-    public static void saveNews() {
+    public void saveNews() {
         clickButton(saveButton);
     }
 
-    public static List<News> getNewsList() {
-        return newsList;
-    }
-
-    public static void clearNewsList() {
-        newsList.clear();
-    }
-
-    public static class News {
-        private final String title;
-        private final String category;
-        private final String description;
-
-        public News(String title, String category, String description) {
-            this.title = title;
-            this.category = category;
-            this.description = description;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getCategory() {
-            return category;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-    }
-
-    public static int getRandomItemInNewsBlock() {
+    public int getRandomItemInNewsBlock() {
         return getRandomItemPosition(newsListRecyclerView);
     }
 
-    public static void clickButtonInSelectedNews(int viewId, int position) {
+    public void clickButtonInSelectedNews(int viewId, int position) {
         clickButtonInSelectedItem(newsListRecyclerView, viewId, position);
     }
 
-    public static void clickSelectedItemInNewsBlock(int position) {
+    public void clickSelectedItemInNewsBlock(int position) {
         clickSelectedItemInBlock(position, newsListRecyclerView);
     }
 
-    public static void clearNewsInRecyclerView() {
+    public void clearNewsInRecyclerView() {
         boolean newsRemoved;
         do {
             newsRemoved = performActionToDeleteNews();
@@ -227,7 +202,7 @@ public class NewsHelper {
         } while (newsRemoved);
     }
 
-    public static boolean isRetryButtonDisplayed() {
+    public boolean isRetryButtonDisplayed() {
         try {
             waitForViewDisplayed(retryButton, 1000);
             onView(withId(retryButton)).check(matches(isDisplayed()));
@@ -237,7 +212,7 @@ public class NewsHelper {
         }
     }
 
-    public static boolean performActionToDeleteNews() {
+    public boolean performActionToDeleteNews() {
         if (isRecyclerViewEmpty(newsListRecyclerView)) {
             return false;
         } else {

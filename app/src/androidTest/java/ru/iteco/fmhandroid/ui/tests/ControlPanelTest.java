@@ -14,7 +14,6 @@ import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.ui.AppActivity;
 import ru.iteco.fmhandroid.ui.data.TestData;
 import ru.iteco.fmhandroid.ui.helper.AuthHelper;
-import ru.iteco.fmhandroid.ui.helper.NewsHelper;
 import ru.iteco.fmhandroid.ui.helper.SetupHelper;
 import ru.iteco.fmhandroid.ui.helper.ToastHelper;
 import ru.iteco.fmhandroid.ui.steps.AuthSteps;
@@ -51,7 +50,6 @@ public class ControlPanelTest {
         mainSteps.waitForViewMainScreen();
         navSteps.goToNewsPage();
         navSteps.goToControlPanel();
-        NewsHelper.clearNewsList();
         newsSteps.checkNewsHaveItemsOrAddNewsIfEmpty();
 
     }
