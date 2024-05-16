@@ -212,7 +212,6 @@ public class NewsHelper {
         clickSelectedItemInBlock(position, newsListRecyclerView);
     }
 
-
     public static void clearNewsInRecyclerView() {
         boolean newsRemoved;
         do {

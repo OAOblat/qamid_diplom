@@ -12,6 +12,7 @@ import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Feature;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.ui.AppActivity;
+import ru.iteco.fmhandroid.ui.data.TestData;
 import ru.iteco.fmhandroid.ui.helper.AuthHelper;
 import ru.iteco.fmhandroid.ui.helper.SetupHelper;
 import ru.iteco.fmhandroid.ui.helper.ToastHelper;
@@ -24,8 +25,6 @@ import ru.iteco.fmhandroid.ui.steps.ToastSteps;
 @LargeTest
 @RunWith(AllureAndroidJUnit4.class)
 public class CreateNewsTest {
-
-    private final AuthSteps authSteps = new AuthSteps();
     private final MainSteps mainSteps = new MainSteps();
     private final NavSteps navSteps = new NavSteps();
     private final NewsSteps newsSteps = new NewsSteps();
@@ -38,7 +37,10 @@ public class CreateNewsTest {
 
     @Before
     public void setUp() {
-        AuthHelper.User info = AuthHelper.authInfo();
+        TestData testData = new TestData();
+        AuthHelper authHelper = new AuthHelper(testData);
+        AuthSteps authSteps = new AuthSteps(authHelper);
+        AuthHelper.User info = authHelper.authInfo();
         SetupHelper setupHelper = new SetupHelper(mActivityScenarioRule);
         toastSteps = new ToastSteps(new ToastHelper(setupHelper.getDecorView()));
         try {

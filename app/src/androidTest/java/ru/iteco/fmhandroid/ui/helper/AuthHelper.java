@@ -1,16 +1,16 @@
 package ru.iteco.fmhandroid.ui.helper;
 
-import static ru.iteco.fmhandroid.ui.data.TestData.emptyField;
-import static ru.iteco.fmhandroid.ui.data.TestData.invalidLogin;
-import static ru.iteco.fmhandroid.ui.data.TestData.invalidPass;
-import static ru.iteco.fmhandroid.ui.data.TestData.validLogin;
-import static ru.iteco.fmhandroid.ui.data.TestData.validPass;
+import ru.iteco.fmhandroid.ui.data.TestData;
 
 public class AuthHelper {
-    public AuthHelper() {
+
+    private final TestData testData;
+
+    public AuthHelper(TestData testData) {
+        this.testData = testData;
     }
 
-    public static class User {
+    public class User {
         private final String login;
         private final String pass;
 
@@ -28,31 +28,31 @@ public class AuthHelper {
         }
     }
 
-    public static User authInfo() {
-        return new User(validLogin, validPass);
+    public User authInfo() {
+        return new User(testData.getValidLogin(), testData.getValidPass());
     }
 
-    public static User invalidAuthData() {
-        return new User(invalidLogin, invalidPass);
+    public User invalidAuthData() {
+        return new User(testData.getInvalidLogin(), testData.getInvalidPass());
     }
 
-    public static User invalidLoginData() {
-        return new User(invalidLogin, validPass);
+    public User invalidLoginData() {
+        return new User(testData.getInvalidLogin(), testData.getValidPass());
     }
 
-    public static User invalidPassData() {
-        return new User(validLogin, invalidPass);
+    public User invalidPassData() {
+        return new User(testData.getValidLogin(), testData.getInvalidPass());
     }
 
-    public static User emptyLogin() {
-        return new User(emptyField, validPass);
+    public User emptyLogin() {
+        return new User(testData.getEmptyField(), testData.getValidPass());
     }
 
-    public static User emptyPassword() {
-        return new User(validLogin, emptyField);
+    public User emptyPassword() {
+        return new User(testData.getValidLogin(), testData.getEmptyField());
     }
 
-    public static User emptyLoginAndPassword() {
-        return new User(emptyField, emptyField);
+    public User emptyLoginAndPassword() {
+        return new User(testData.getEmptyField(), testData.getEmptyField());
     }
 }

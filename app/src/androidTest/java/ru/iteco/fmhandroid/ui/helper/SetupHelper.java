@@ -13,10 +13,8 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import ru.iteco.fmhandroid.ui.AppActivity;
-import ru.iteco.fmhandroid.ui.steps.NavSteps;
 
 public class SetupHelper {
-    NavSteps navSteps = new NavSteps();
     private View decorView;
     private final ActivityScenarioRule<AppActivity> activityScenarioRule;
 

@@ -19,6 +19,16 @@ import ru.iteco.fmhandroid.ui.helper.AuthHelper;
 
 public class AuthSteps {
 
+    private final AuthHelper authHelper;
+
+    public AuthSteps(AuthHelper authHelper) {
+        this.authHelper = authHelper;
+    }
+
+    public AuthHelper getAuthHelper() {
+        return authHelper;
+    }
+
     public void authenticate(AuthHelper.User info) {
         waitForViewDisplayed(loginField, 6000);
         performSignIn(info);
